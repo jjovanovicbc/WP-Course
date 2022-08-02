@@ -22,12 +22,12 @@ class Search {
             
         })
         document.addEventListener('keydown', (e) => {
-            if(e.key === 's'){
+            if(e.key === 's' && !this.isOverlayOpen){
                 this.openOverlay();
                 document.body.classList.add('body-no-scroll');
                 console.log("s pressed")
             }
-             if(e.key === 'Escape'){                
+             if(e.key === 'Escape' && this.isOverlayOpen){                
                 this.closeOverlay();
                 document.body.classList.remove('body-no-scroll');
                 console.log("esc pressed");
@@ -38,6 +38,7 @@ class Search {
     // Methods
     openOverlay(){
         this.searchOverlay.classList.add('search-overlay--active');
+        this.isOverlayOpen = true;
     }
     closeOverlay(){
         this.searchOverlay.classList.remove('search-overlay--active');
