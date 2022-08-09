@@ -3,10 +3,9 @@
   get_header();
 
   while(have_posts()) {
-    the_post(); 
+    the_post();
     pageBanner();
-    ?>
-    
+     ?>
 
     <div class="container container--narrow page-section">
           <div class="metabox metabox--position-up metabox--with-home-link">
@@ -16,19 +15,19 @@
       <div class="generic-content"><?php the_content(); ?></div>
 
       <?php 
-        $relatedProfessors = new WP_Query([
+        $relatedProfessors = new WP_Query(array(
           'posts_per_page' => -1,
           'post_type' => 'professor',
           'orderby' => 'title',
           'order' => 'ASC',
-          'meta_query' => [
-            [
-              'key' => 'related_program',
+          'meta_query' => array(
+            array(
+              'key' => 'related_programs',
               'compare' => 'LIKE',
               'value' => '"' . get_the_ID() . '"'
-            ]
-          ]
-        ]);
+            )
+          )
+        ));
 
         if ($relatedProfessors->have_posts()) {
           echo '<hr class="section-break">';
@@ -64,7 +63,7 @@
               'type' => 'numeric'
             ),
             array(
-              'key' => 'related_program',
+              'key' => 'related_programs',
               'compare' => 'LIKE',
               'value' => '"' . get_the_ID() . '"'
             )
@@ -75,10 +74,25 @@
           echo '<hr class="section-break">';
         echo '<h2 class="headline headline--medium">Upcoming ' . get_the_title() . ' Events</h2>';
 
-          while($homepageEvents->have_posts()) {
-            $homepageEvents->the_post();
-            get_template_part('./template-parts/content-event');
-           }  
+        while($homepageEvents->have_posts()) {
+          $homepageEvents->the_post();
+          get_template_part('template-parts/content-event');
+        }
+        }
+
+        wp_reset_postdata();
+        $relatedCampuses = get_field('related_campus');
+
+        if ($relatedCampuses) {
+          echo '<hr class="section-break">';
+          echo '<h2 class="headline headline--medium">' . get_the_title() . ' is Available At These Campuses:</h2>';
+
+          echo '<ul class="min-list link-list">';
+          foreach($relatedCampuses as $campus) {
+            ?> <li><a href="<?php echo get_the_permalink($campus); ?>"><?php echo get_the_title($campus) ?></a></li> <?php
+          }
+          echo '</ul>';
+
         }
 
       ?>
